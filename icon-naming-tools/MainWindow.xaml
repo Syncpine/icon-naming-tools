@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:icon_naming_tools"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid Name="GridGlobal">
+        Title="icon-naming-tools" Height="350" Width="600" MinHeight="200" MinWidth="600" MaxHeight="400" MaxWidth="700">
+    <Grid Name="GlobalGrid">
         
     </Grid>
 </Window>
