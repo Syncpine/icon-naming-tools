@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Microsoft.Win32;
 
 namespace icon_naming_tools
@@ -16,207 +16,211 @@ namespace icon_naming_tools
         {
             InitializeComponent();
 
-            GridGlobal.ShowGridLines = false;
+            GlobalGrid.ShowGridLines = true;
+            GlobalGrid.Background = new SolidColorBrush(Color.FromRgb(245, 245, 245));
 
-            GridGlobal.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(50) });
-            GridGlobal.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(50) });
-            GridGlobal.RowDefinitions.Add(new RowDefinition());
+            GlobalGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(40) });
+            GlobalGrid.RowDefinitions.Add(new RowDefinition());
 
-            GridGlobal.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(100) });
-            GridGlobal.ColumnDefinitions.Add(new ColumnDefinition());
-            GridGlobal.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(100) });
+            GlobalGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
-            // Label Address
+            // StackPanel
+            StackPanel stackPanel = new StackPanel()
+            {
+                Margin = new Thickness(0, 2, 0, 2),
+                Orientation = Orientation.Horizontal,
+            };
+            GlobalGrid.Children.Add(stackPanel);
+            Grid.SetRow(stackPanel, 0);
+            Grid.SetColumn(stackPanel, 0);
+
+            // Label -> Address
             Label labelAddress = new Label()
             {
-                Name = "Address",
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(10, 0, 0, 0),
 
                 Content = "Address:",
+                FontSize = 14,
+                FontFamily = new FontFamily("inherit"),
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center,
             };
-            GridGlobal.Children.Add(labelAddress);
+            stackPanel.Children.Add(labelAddress);
 
-            Grid.SetRow(labelAddress, 0);
-            Grid.SetColumn(labelAddress, 0);
-
-            // Input Address
-            _textAddress = new TextBox()
+            // TextBox -> Input
+            _textBox = new TextBox()
             {
-                Name = "Address",
-                Width = 200,
-                Height = 30,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
+                Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0)),
+                BorderThickness = new Thickness(0),
+                Margin = new Thickness(5, 0, 5, 0),
 
+                Text = "",
+                FontSize = 13,
+                FontFamily = new FontFamily("inherit"),
                 HorizontalContentAlignment = HorizontalAlignment.Left,
                 VerticalContentAlignment = VerticalAlignment.Center,
             };
-            GridGlobal.Children.Add(_textAddress);
 
-            Grid.SetRow(_textAddress, 0);
-            Grid.SetColumn(_textAddress, 1);
-
-            // Btn Open
-            Button btnOpen = new Button()
+            Border borderInput = new Border()
             {
-                Name = "Open",
-                Width = 80,
+                Width = 240,
                 Height = 30,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
+                Background = new SolidColorBrush(Color.FromRgb(226, 226, 226)),
+                Margin = new Thickness(10, 0, 0, 0),
+
+                CornerRadius = new CornerRadius(5),
+
+                Child = _textBox,
+            };
+            stackPanel.Children.Add(borderInput);
+
+            // Button -> Open
+            Button buttonOpen = new Button()
+            {
+                Width = 70,
+                Height = 30,
+                BorderThickness = new Thickness(0),
+                Background = new SolidColorBrush(Color.FromRgb(200, 200, 200)),
+                Margin = new Thickness(10, 0, 0, 0),
+
 
                 Content = "Open",
+                FontSize = 12,
+                FontFamily = new FontFamily("inherit"),
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center,
             };
-            GridGlobal.Children.Add(btnOpen);
+            stackPanel.Children.Add(buttonOpen);
 
-            Grid.SetRow(btnOpen, 0);
-            Grid.SetColumn(btnOpen, 2);
-
-            // Btn Transform
-            Button btnTransform = new Button()
+            // Button -> Transform
+            Button buttonTransform = new Button()
             {
-                Name = "Transform",
-                Width = 80,
+                Width = 100,
                 Height = 30,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
+                BorderThickness = new Thickness(0),
+                Background = new SolidColorBrush(Color.FromRgb(200, 200, 200)),
+                Margin = new Thickness(10, 0, 0, 0),
 
                 Content = "Transform",
+                FontSize = 12,
+                FontFamily = new FontFamily("inherit"),
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center,
             };
-            GridGlobal.Children.Add(btnTransform);
+            stackPanel.Children.Add(buttonTransform);
 
-            Grid.SetRow(btnTransform, 1);
-            Grid.SetColumn(btnTransform, 1);
-
-            // Label Status
+            // Label -> Status
             _labelStatus = new Label()
             {
-                Name = "Status",
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
+                Background = new SolidColorBrush(Color.FromRgb(255, 255, 255)),
+                Margin = new Thickness(10, 10, 10, 10),
 
                 Content = "",
-                HorizontalContentAlignment = HorizontalAlignment.Center,
-                VerticalContentAlignment = VerticalAlignment.Center,
+                FontSize = 13,
+                FontFamily = new FontFamily("Calibre"),
+                HorizontalContentAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Top,
             };
-            GridGlobal.Children.Add(_labelStatus);
-
-            Grid.SetRow(_labelStatus, 2);
+            GlobalGrid.Children.Add(_labelStatus);
+            Grid.SetRow(_labelStatus, 1);
             Grid.SetColumn(_labelStatus, 0);
 
-            Grid.SetColumnSpan(_labelStatus, 3);
-
-            btnOpen.Click += new RoutedEventHandler(BtnOpenClick);
-            btnTransform.Click += new RoutedEventHandler(BtnTransformClick);
+            buttonOpen.Click += new RoutedEventHandler(ButtonOpenClick);
+            buttonTransform.Click += new RoutedEventHandler(ButtonTransformClick);
         }
 
-        // Open Folder
-        private void BtnOpenClick(object sender, RoutedEventArgs e)
+        private void ButtonOpenClick(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            OpenFileDialog openFileDialog = new OpenFileDialog()
             {
-                InitialDirectory = "C:\\Users\\31611\\Downloads",
+                InitialDirectory = "C:\\Users\\31611\\Downloads\\",
                 RestoreDirectory = true,
             };
             openFileDialog.ShowDialog();
 
-            _textAddress.Width = double.NaN;
-
-            _textAddress.Text = openFileDialog.FileName;
-
-            _labelStatus.Content = "Open " + openFileDialog.FileName + " success.";
+            _textBox.Text = openFileDialog.FileName;
         }
 
-        // Transform
-        private void BtnTransformClick(object sender, RoutedEventArgs e)
+        private void ButtonTransformClick(object sender, RoutedEventArgs e)
         {
-            if ("" == _textAddress.Text)
+            string path = _textBox.Text.Replace("\\", "/");
+            double imageWidth = 0.0, imageHeight = 0.0;
+            string newFilePath = "";
+
+            if ("" == path)
             {
-                _labelStatus.Content = "Please input icon path.";
-                _textAddress.Width = 200;
-                return;
-            }
-
-            if (!File.Exists(_textAddress.Text))
-            {
-                _labelStatus.Content = _textAddress.Text + " is not exist.";
-                _textAddress.Width = 200;
-                return;
-            }
-
-            string sourceIcon = _textAddress.Text;
-            string sourceIconWithoutExtension = Path.GetFileNameWithoutExtension(sourceIcon);
-
-            _iconInfoGroup.DirectoryPath = Path.GetDirectoryName(sourceIcon);
-            _iconInfoGroup.UpdateDirectoryPath = _updateDirectoryPath;
-            _iconInfoGroup.Extension = Path.GetExtension(sourceIcon);
-
-            string statusStr = "";
-            bool isExist = true;
-            foreach (var name in _nameMap)
-            {
-                string iconFilePath = Path.Combine(_iconInfoGroup.DirectoryPath,
-                    sourceIconWithoutExtension + name.Key + _iconInfoGroup.Extension);
-                if (!File.Exists(iconFilePath))
-                {
-                    statusStr += iconFilePath + "\n";
-                    isExist = false;
-                }
-
-                _iconInfoGroup.IconPathList.Add(iconFilePath);
-
-                string updateIconFilePath = Path.Combine(_iconInfoGroup.UpdateDirectoryPath,
-                    sourceIconWithoutExtension + name.Value + _iconInfoGroup.Extension);
-                _iconInfoGroup.UpdateIconPathList.Add(updateIconFilePath);
-            }
-
-            if (!isExist)
-            {
-                _labelStatus.Content = statusStr + " is not exist\n";
-                _textAddress.Width = 200;
+                _labelStatus.Content = "Please open a file.";
                 return;
             }
 
             try
             {
-                for (int index = 0; index < _iconInfoGroup.IconPathList.Count; index++)
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
                 {
-                    // File.Move(_iconInfoGroup.IconPathList[index], _iconInfoGroup.UpdateIconPathList[index]);
-                    File.Copy(_iconInfoGroup.IconPathList[index], _iconInfoGroup.UpdateIconPathList[index]);
+                    System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
+                    imageWidth = image.Width;
+                    imageHeight = image.Height;
                 }
             }
-            catch (Exception exception)
+            catch (Exception exp)
             {
-                Console.WriteLine(exception.Message + exception.StackTrace);
-                _labelStatus.Content = "Transform error!\n";
+                Console.WriteLine(exp.Message + exp.StackTrace);
+                _labelStatus.Content = "Not image file !" + "\n\t" + path;
                 return;
             }
 
-            _labelStatus.Content = "Transform succeed!\n";
+            try
+            {
+                string fileName = Path.GetFileName(path);
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                string fileNameExtension = Path.GetExtension(fileName);
+
+                string newFileName = FormatStr(fileNameWithoutExtension).Trim() + " " + imageWidth + "x" + imageHeight +
+                                     fileNameExtension;
+
+                newFilePath = Path.Combine(NewDirPath, newFileName).Replace("\\", "/");
+
+                _labelStatus.Content = newFilePath;
+            }
+            catch (Exception exp)
+            {
+                Console.WriteLine(exp.Message + exp.StackTrace);
+                _labelStatus.Content = "File rename failed !" + "\n\t" + path + "\n\t" + newFilePath;
+                return;
+            }
+
+            try
+            {
+                File.Copy(path, newFilePath, true);
+            }
+            catch (Exception exp)
+            {
+                Console.WriteLine(exp.Message + exp.StackTrace);
+                _labelStatus.Content = "File rename failed !" + "\n\t" + path + "\n\t" + newFilePath;
+                return;
+            }
+
+            _labelStatus.Content = "Success copy file." + "\n\t" + path + "\n\t" + newFilePath;
         }
 
-        private readonly TextBox _textAddress;
+        // Remove "(...)" from string
+        private string FormatStr(string str)
+        {
+            int begin = str.IndexOf("(", StringComparison.Ordinal);
+            int end = str.IndexOf(")", StringComparison.Ordinal);
+
+            if (-1 != begin && -1 != end && begin < end)
+            {
+                str = str.Remove(begin, end - begin + 1);
+            }
+
+            return str;
+        }
 
         private readonly Label _labelStatus;
 
-        private readonly IconInfo _iconInfoGroup = new IconInfo();
+        private readonly TextBox _textBox;
 
-        private readonly string _updateDirectoryPath = "D:\\WorkSpace\\Game\\Material";
-
-        private readonly Dictionary<string, string> _nameMap = new Dictionary<string, string>()
-        {
-            { "", " 16x16" },
-            { " (1)", " 32x32" },
-            { " (2)", " 48x48" },
-            { " (3)", " 64x64" },
-            { " (4)", " 128x128" },
-        };
+        private const string NewDirPath = "D:/WorkSpace/Game/Material/";
     }
 }
