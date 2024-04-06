@@ -16,7 +16,7 @@ namespace icon_naming_tools
         {
             InitializeComponent();
 
-            GlobalGrid.ShowGridLines = true;
+            // GlobalGrid.ShowGridLines = true;
             GlobalGrid.Background = new SolidColorBrush(Color.FromRgb(245, 245, 245));
 
             GlobalGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(40) });
